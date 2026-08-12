@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useCart } from '../hooks/useCart';
+import { updateProduct } from '../services/api';
 import { ShippingDetails, Order } from '../types';
 import { Button } from '../components/common/Button';
 import { formatCurrency } from '../utils/formatCurrency';
@@ -55,7 +56,20 @@ export const Checkout: React.FC = () => {
     paymentMethod: 'cod',
   };
 
-  const handleSubmit = (values: ShippingDetails) => {
+  const handleSubmit = async (values: ShippingDetails) => {
+    try {
+      // Deduct purchased quantity from MockAPI backend stock levels
+      await Promise.all(
+        cart.map((item) => {
+          const currentStock = Number(item.product.stock);
+          const newStock = Math.max(0, currentStock - item.quantity);
+          return updateProduct(item.product.id, { stock: newStock });
+        })
+      );
+    } catch (err) {
+      console.error('Failed to update stock in backend:', err);
+    }
+
     const newOrder: Order = {
       id: `ORD-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
       items: [...cart],
