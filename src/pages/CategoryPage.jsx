@@ -1,1 +1,1 @@
-// Deprecated - Migrated to CategoryPage.tsx
+export { default } from './CategoryPage.tsx';

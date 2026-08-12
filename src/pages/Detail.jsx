@@ -1,1 +1,1 @@
-// Deprecated - Migrated to Detail.tsx
+export { default } from './Detail.tsx';

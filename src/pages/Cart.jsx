@@ -1,1 +1,1 @@
-// Deprecated - Migrated to Cart.tsx
+export { default } from './Cart.tsx';
