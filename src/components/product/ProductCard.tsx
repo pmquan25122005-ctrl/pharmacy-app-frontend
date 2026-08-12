@@ -4,6 +4,7 @@ import { Product } from '../../types';
 import { useCart } from '../../hooks/useCart';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 interface ProductCardProps {
   product: Product;
@@ -80,7 +81,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
           <div>
             <span className="text-xs text-slate-400 block">Price</span>
             <span className="text-lg font-bold text-emerald-600">
-              ${Number(product.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              {formatCurrency(product.price)}
             </span>
           </div>
 

@@ -5,6 +5,7 @@ import { Product, CreateProductInput, CategoryType } from '../../types';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '../../services/api';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const ProductSchema = Yup.object().shape({
   name: Yup.string()
@@ -267,7 +268,7 @@ export const Dashboard: React.FC = () => {
 
                         {/* Unit Price */}
                         <td className="p-4 font-bold text-slate-900">
-                          ${Number(product.price).toFixed(2)}
+                          {formatCurrency(product.price)}
                         </td>
 
                         {/* Stock Badge */}

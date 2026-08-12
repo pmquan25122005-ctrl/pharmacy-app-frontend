@@ -3,6 +3,7 @@ import { useLocation, Link, Navigate } from 'react-router-dom';
 import { Order } from '../types';
 import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
+import { formatCurrency } from '../utils/formatCurrency';
 
 export const Confirmation: React.FC = () => {
   const location = useLocation();
@@ -105,7 +106,7 @@ export const Confirmation: React.FC = () => {
                   <Badge variant="slate">x{quantity}</Badge>
                 </div>
                 <span className="font-bold text-slate-800">
-                  ${(Number(product.price) * quantity).toFixed(2)}
+                  {formatCurrency(Number(product.price) * quantity)}
                 </span>
               </div>
             ))}
@@ -119,7 +120,7 @@ export const Confirmation: React.FC = () => {
             <span className="text-xs text-emerald-600">Includes all taxes and shipping</span>
           </div>
           <span className="text-2xl font-extrabold text-emerald-700">
-            ${totalAmount.toFixed(2)}
+            {formatCurrency(totalAmount)}
           </span>
         </div>
 

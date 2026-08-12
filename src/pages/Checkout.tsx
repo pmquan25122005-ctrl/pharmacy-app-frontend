@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useCart } from '../hooks/useCart';
 import { ShippingDetails, Order } from '../types';
 import { Button } from '../components/common/Button';
+import { formatCurrency } from '../utils/formatCurrency';
 
 const CheckoutSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -196,7 +197,7 @@ export const Checkout: React.FC = () => {
                     isLoading={isSubmitting}
                     className="w-full shadow-md"
                   >
-                    Place Order & Confirm Order (${grandTotal.toFixed(2)})
+                    Place Order & Confirm Order ({formatCurrency(grandTotal)})
                   </Button>
                 </div>
 
@@ -220,7 +221,7 @@ export const Checkout: React.FC = () => {
                   <span className="text-slate-400">x{quantity}</span>
                 </div>
                 <span className="font-bold text-slate-700">
-                  ${(Number(product.price) * quantity).toFixed(2)}
+                  {formatCurrency(Number(product.price) * quantity)}
                 </span>
               </div>
             ))}
@@ -229,16 +230,16 @@ export const Checkout: React.FC = () => {
           <div className="pt-3 border-t border-slate-100 space-y-2 text-sm">
             <div className="flex justify-between text-slate-600">
               <span>Subtotal</span>
-              <span className="font-semibold text-slate-900">${totalPrice.toFixed(2)}</span>
+              <span className="font-semibold text-slate-900">{formatCurrency(totalPrice)}</span>
             </div>
             <div className="flex justify-between text-slate-600">
               <span>Shipping Fee</span>
-              <span className="font-semibold text-slate-900">${shippingFee.toFixed(2)}</span>
+              <span className="font-semibold text-slate-900">{formatCurrency(shippingFee)}</span>
             </div>
             <div className="pt-2 border-t border-slate-100 flex justify-between items-baseline">
               <span className="font-bold text-slate-900">Total Due</span>
               <span className="text-2xl font-extrabold text-emerald-600">
-                ${grandTotal.toFixed(2)}
+                {formatCurrency(grandTotal)}
               </span>
             </div>
           </div>

@@ -6,6 +6,8 @@ import { Button } from '../components/common/Button';
 
 import { useCart } from '../hooks/useCart';
 
+import { formatCurrency } from '../utils/formatCurrency';
+
 export const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { product, isLoading, error } = useProductDetail(id);
@@ -92,7 +94,7 @@ export const Detail: React.FC = () => {
             <div>
               <span className="text-xs text-slate-500 block">Unit Price</span>
               <span className="text-3xl font-extrabold text-emerald-600">
-                ${Number(product.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                {formatCurrency(product.price)}
               </span>
             </div>
             <div>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
+import { formatCurrency } from '../utils/formatCurrency';
 
 export const Cart: React.FC = () => {
   const { cart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
@@ -71,7 +72,7 @@ export const Cart: React.FC = () => {
                       <div className="flex items-center space-x-2">
                         <Badge variant="slate">{product.category}</Badge>
                         <span className="text-xs text-slate-400">
-                          ${Number(product.price).toFixed(2)} each
+                          {formatCurrency(product.price)} each
                         </span>
                       </div>
                     </div>
@@ -106,7 +107,7 @@ export const Cart: React.FC = () => {
                     <div className="text-right min-w-[80px]">
                       <span className="text-xs text-slate-400 block sm:hidden">Total</span>
                       <span className="font-bold text-slate-900 text-base">
-                        ${itemTotal.toFixed(2)}
+                        {formatCurrency(itemTotal)}
                       </span>
                     </div>
 
@@ -148,16 +149,16 @@ export const Cart: React.FC = () => {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between text-slate-600">
               <span>Items Subtotal ({totalItems})</span>
-              <span className="font-semibold text-slate-900">${totalPrice.toFixed(2)}</span>
+              <span className="font-semibold text-slate-900">{formatCurrency(totalPrice)}</span>
             </div>
             <div className="flex justify-between text-slate-600">
               <span>Estimated Shipping</span>
-              <span className="font-semibold text-slate-900">${estimatedShipping.toFixed(2)}</span>
+              <span className="font-semibold text-slate-900">{formatCurrency(estimatedShipping)}</span>
             </div>
             <div className="pt-3 border-t border-slate-100 flex justify-between items-baseline">
               <span className="text-base font-bold text-slate-900">Grand Total</span>
               <span className="text-2xl font-extrabold text-emerald-600">
-                ${grandTotal.toFixed(2)}
+                {formatCurrency(grandTotal)}
               </span>
             </div>
           </div>
