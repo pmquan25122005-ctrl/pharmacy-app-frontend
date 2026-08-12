@@ -21,9 +21,22 @@ export const useProducts = (categoryFilter?: string): UseProductsResult => {
       const data = await getProducts();
       
       if (categoryFilter && categoryFilter !== 'All') {
-        const filtered = data.filter(
-          (p) => p.category?.toLowerCase() === categoryFilter.toLowerCase()
-        );
+        const filterLower = categoryFilter.toLowerCase();
+        const filtered = data.filter((p) => {
+          const catLower = (p.category || '').toLowerCase();
+          
+          if (filterLower.includes('medicine')) {
+            return catLower.includes('medicine') || catLower.includes('first aid') || catLower.includes('supplement');
+          }
+          if (filterLower.includes('device') || filterLower.includes('equipment')) {
+            return catLower.includes('device') || catLower.includes('equipment') || catLower.includes('protection');
+          }
+          if (filterLower.includes('cosmetics') || filterLower.includes('skincare')) {
+            return catLower.includes('cosmetics') || catLower.includes('skincare') || catLower.includes('personal care');
+          }
+
+          return catLower === filterLower;
+        });
         setProducts(filtered);
       } else {
         setProducts(data);

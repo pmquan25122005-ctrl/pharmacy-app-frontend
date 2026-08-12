@@ -1,4 +1,4 @@
-export type CategoryType = 'Medicine' | 'Medical Equipment' | 'Dermocosmetics' | 'General';
+export type CategoryType = 'Medicine' | 'Medical Equipment' | 'Dermocosmetics' | 'General' | 'Medical Device' | 'Skincare' | 'Supplement' | 'First Aid' | 'Protection' | 'Personal Care' | string;
 
 export interface Product {
   id: string;
