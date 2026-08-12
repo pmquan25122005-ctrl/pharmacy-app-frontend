@@ -4,9 +4,12 @@ import { useProductDetail } from '../hooks/useProductDetail';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 
+import { useCart } from '../hooks/useCart';
+
 export const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { product, isLoading, error } = useProductDetail(id);
+  const { addToCart } = useCart();
 
   if (isLoading) {
     return (
@@ -116,7 +119,7 @@ export const Detail: React.FC = () => {
               size="lg"
               className="flex-1"
               disabled={isOutOfStock}
-              onClick={() => alert(`Added ${product.name} to cart!`)}
+              onClick={() => product && addToCart(product, 1)}
             >
               Add to Cart 🛒
             </Button>

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useCart } from '../../hooks/useCart';
 
-interface NavbarProps {
-  cartItemCount?: number;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ cartItemCount = 0 }) => {
+export const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalItems } = useCart();
   const navigate = useNavigate();
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
@@ -68,13 +66,14 @@ export const Navbar: React.FC<NavbarProps> = ({ cartItemCount = 0 }) => {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               to="/cart"
-              className="relative p-2 text-emerald-100 hover:text-white hover:bg-emerald-700 rounded-full transition-colors"
+              className="relative p-2 text-emerald-100 hover:text-white hover:bg-emerald-700 rounded-full transition-colors flex items-center space-x-1"
               title="View Cart"
             >
               <span className="text-xl">🛒</span>
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-5 text-center">
-                  {cartItemCount}
+              <span className="text-sm font-medium">Cart</span>
+              {totalItems > 0 && (
+                <span className="bg-amber-400 text-slate-900 text-xs font-extrabold px-2 py-0.5 rounded-full ml-1 animate-pulse">
+                  {totalItems}
                 </span>
               )}
             </Link>
@@ -98,11 +97,11 @@ export const Navbar: React.FC<NavbarProps> = ({ cartItemCount = 0 }) => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
-            <Link to="/cart" className="relative p-2 text-white">
+            <Link to="/cart" className="relative p-2 text-white flex items-center">
               <span className="text-xl">🛒</span>
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                  {cartItemCount}
+              {totalItems > 0 && (
+                <span className="bg-amber-400 text-slate-900 text-xs font-bold px-1.5 py-0.5 rounded-full ml-1">
+                  {totalItems}
                 </span>
               )}
             </Link>
@@ -172,4 +171,3 @@ export const Navbar: React.FC<NavbarProps> = ({ cartItemCount = 0 }) => {
 };
 
 export default Navbar;
-

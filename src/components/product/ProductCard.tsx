@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../types';
+import { useCart } from '../../hooks/useCart';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 
@@ -10,7 +11,16 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  const { addToCart } = useCart();
   const isOutOfStock = product.stock <= 0;
+
+  const handleAddToCart = () => {
+    if (onAddToCart) {
+      onAddToCart(product);
+    } else {
+      addToCart(product, 1);
+    }
+  };
 
   const categoryBadgeVariant = (cat: string) => {
     switch (cat) {
@@ -80,16 +90,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
                 Details
               </Button>
             </Link>
-            {onAddToCart && (
-              <Button
-                variant="primary"
-                size="sm"
-                disabled={isOutOfStock}
-                onClick={() => onAddToCart(product)}
-              >
-                Add 🛒
-              </Button>
-            )}
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={isOutOfStock}
+              onClick={handleAddToCart}
+            >
+              Add 🛒
+            </Button>
           </div>
         </div>
       </div>
@@ -98,4 +106,3 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
 };
 
 export default ProductCard;
-

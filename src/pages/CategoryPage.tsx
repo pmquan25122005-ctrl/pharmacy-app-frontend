@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { CategoryType } from '../types';
 import { useProducts } from '../hooks/useProducts';
+import { useDebounce } from '../hooks/useDebounce';
 import { ProductGrid } from '../components/product/ProductGrid';
 import { Badge } from '../components/common/Badge';
 
@@ -10,8 +12,29 @@ interface CategoryPageProps {
 
 export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
   const { products, isLoading, error } = useProducts(category);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'name-asc'>('default');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read initial states from URL query parameters
+  const initialSearch = searchParams.get('search') || '';
+  const initialSort = (searchParams.get('sort') as 'default' | 'price-asc' | 'price-desc' | 'name-asc') || 'default';
+
+  const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
+  const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'name-asc'>(initialSort);
+
+  // Debounce search term to prevent rapid filter re-calculations while typing
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  // Sync debounced search & sort states back to URL query parameters
+  useEffect(() => {
+    const params: Record<string, string> = {};
+    if (debouncedSearchTerm.trim()) {
+      params.search = debouncedSearchTerm.trim();
+    }
+    if (sortBy !== 'default') {
+      params.sort = sortBy;
+    }
+    setSearchParams(params, { replace: true });
+  }, [debouncedSearchTerm, sortBy, setSearchParams]);
 
   const categoryTitles: Record<CategoryType, { title: string; desc: string; badge: string }> = {
     Medicine: {
@@ -40,8 +63,8 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = products.filter((p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      p.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      p.description?.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     );
 
     if (sortBy === 'price-asc') {
@@ -53,7 +76,7 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
     }
 
     return result;
-  }, [products, searchTerm, sortBy]);
+  }, [products, debouncedSearchTerm, sortBy]);
 
   return (
     <div className="space-y-8">
@@ -123,7 +146,7 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
         <ProductGrid
           products={filteredAndSortedProducts}
           isLoading={isLoading}
-          emptyMessage={`No products found matching "${searchTerm}". Try checking for spelling errors or clear search filter.`}
+          emptyMessage={`No products found matching "${debouncedSearchTerm}". Try checking for spelling errors or clear search filter.`}
         />
       )}
 
