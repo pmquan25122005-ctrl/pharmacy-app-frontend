@@ -9,7 +9,7 @@ export const Cart: React.FC = () => {
   const { cart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
   const navigate = useNavigate();
 
-  const estimatedShipping = cart.length > 0 ? 5.0 : 0.0;
+  const estimatedShipping = cart.length > 0 ? 30000 : 0;
   const grandTotal = totalPrice + estimatedShipping;
 
   if (cart.length === 0) {

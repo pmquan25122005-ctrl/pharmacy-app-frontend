@@ -29,7 +29,7 @@ export const Checkout: React.FC = () => {
   const { cart, totalPrice, totalItems, clearCart } = useCart();
   const navigate = useNavigate();
 
-  const shippingFee = cart.length > 0 ? 5.0 : 0.0;
+  const shippingFee = cart.length > 0 ? 30000 : 0;
   const grandTotal = totalPrice + shippingFee;
 
   if (cart.length === 0) {
